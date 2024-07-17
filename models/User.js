@@ -32,7 +32,7 @@ class User {
     return results[0]
   }
 
-  static async create(username, firstName, lastName, email, avatar, password) {
+  static async create(username, firstName, lastName, email, avatar = '', password) {
     const query = `
       INSERT INTO users (username, firstName, lastName, email, avatar, password)
       VALUES (?, ?, ?, ?, ?, ?) RETURNING *;
