@@ -33,13 +33,18 @@ class User {
   }
 
   static async create(username, firstName, lastName, email, avatar = '', password) {
+    const userExists = await User.findByUserName(username)
+    //if (userExists) return {"result": false, "reason": `Username ${username} already exists!`};
+    if (userExists) return {"result": false, "reason": "Unable to create user!"};
     const query = `
       INSERT INTO users (username, firstName, lastName, email, avatar, password)
       VALUES (?, ?, ?, ?, ?, ?) RETURNING *;
     `
-    const addedUser = await db.raw(query, [username, firstName, lastName, email, avatar, password])
+    const addedUser = await db.raw(query, [
+      username, firstName, lastName, email, avatar, password
+    ])
     delete addedUser[0].password
-    return addedUser[0]
+    return {"result": true, "created": addedUser[0]}
   }
 
   static async delete(id) {
@@ -47,7 +52,7 @@ class User {
       DELETE FROM users WHERE users.id = ? RETURNING *;
     `
     const idExists = await User.findById(id)
-    if (!await idExists) return {"result": false, "reason": `User id ${id} doesn't exist!`};
+    if (idExists) return {"result": false, "reason": `User id ${id} doesn't exist!`};
     else {const deletedUser = await db.raw(query, [id])
       delete deletedUser[0].password
       return {"result": true, "deleted": deletedUser[0]}
@@ -72,6 +77,7 @@ export default User
 
 //console.log(await User.create('fab5freddy', 'Freddy', 'Flintstone', 'fab5freddy@gmail.com', 'None.img', '12345LetMeIn'))
 //console.log(await User.findById(202))
+//console.log(await User.findByUserName('Spencer_Pfeffe'))
 //console.log(await User.delete(203))
 //console.log(await User.findById(200))
 //console.log(await User.login('fab5freddy', '12345LetMe'))
