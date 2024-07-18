@@ -12,12 +12,10 @@ class User {
   }
 
   static async findById(id) {
-    /**
-     * TODO: finish this method
-     */
     const query = `
       SELECT id, username, firstName, lastName, email, avatar
-      FROM users WHERE id = ?;
+      FROM users
+      WHERE id = ?;
     `
     const results = await db.raw(query, [id])
     return results[0]
@@ -26,7 +24,8 @@ class User {
   static async findByUserName(username) {
     const query = `
       SELECT id, username, firstName, lastName, email, avatar
-      FROM users WHERE username = ?;
+      FROM users
+      WHERE username = ?;
     `
     const results = await db.raw(query, [username])
     return results[0]
@@ -61,8 +60,7 @@ class User {
 
   static async login(username, password) {
     const query = `
-        SELECT password
-        FROM users WHERE username = ?;
+        SELECT password FROM users WHERE username = ?;
       `
     const userSearch = await User.findByUserName(username)
     if (userSearch) {
