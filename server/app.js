@@ -18,15 +18,35 @@ app.get('/users/:userId', async (req, res) => {
   res.json(user)
 })
 
+app.post('/users/login', async (req, res) => {
+  const isAuthenticated = await User.login(req.body.username, req.body.password)
+  if (isAuthenticated.result && isAuthenticated.data) {
+    res.json(isAuthenticated.data)
+  } else {
+    res.status(401)
+    res.json({
+      status: 'Unauthorised',
+      statusCode: 401,
+      error: {
+        code: 'UNAUTHORISED',
+        message: `Unauthorised credentials given for ${req.body.username}`,
+        details: `Unauthorised reason: ${isAuthenticated.reason}`,
+        timestamp: new Date(),
+        path: req.url
+      }
+    })
+  } 
+})
+
 app.post('/users', async (req, res) => {
   const createUserPost = req.body
   const user = await User.create(
     createUserPost.username,
-    createUserPost.password,
     createUserPost.firstName,
     createUserPost.lastName,
     createUserPost.email,
-    createUserPost.avatar
+    createUserPost.avatar,
+    createUserPost.password,
   )
 
   if (!user.result) {

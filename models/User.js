@@ -21,7 +21,7 @@ class User {
     return results[0]
   }
 
-  static async findByUserName(username) {
+  static async findByUsername(username) {
     const query = `
       SELECT id, username, firstName, lastName, email, avatar
       FROM users
@@ -32,7 +32,7 @@ class User {
   }
 
   static async create(username, firstName, lastName, email, avatar = '', password) {
-    const userExists = await User.findByUserName(username)
+    const userExists = await User.findByUsername(username)
     //if (userExists) return {"result": false, "reason": `Username ${username} already exists!`};
     if (userExists) return {"result": false, "reason": "Unable to create user!"};
     const query = `
@@ -62,7 +62,8 @@ class User {
     const query = `
         SELECT password FROM users WHERE username = ?;
       `
-    const user = await User.findByUserName(username)
+    const user = await User.findByUsername(username)
+    console.log(user)
     if (user) {
       const userPassword = await db.raw(query, [username])
       if (userPassword[0].password === password) {
