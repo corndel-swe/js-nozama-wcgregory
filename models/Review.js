@@ -1,7 +1,7 @@
 import db from '../db/index.js'
 
 class Review {
-  static async reviewByProduct(productId) {
+  static async findByProduct(productId) {
     const query = `
       SELECT id, productId, userId, rating, reviewText, reviewDate 
       FROM reviews

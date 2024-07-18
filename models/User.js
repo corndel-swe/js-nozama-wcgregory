@@ -62,10 +62,12 @@ class User {
     const query = `
         SELECT password FROM users WHERE username = ?;
       `
-    const userSearch = await User.findByUserName(username)
-    if (userSearch) {
+    const user = await User.findByUserName(username)
+    if (user) {
       const userPassword = await db.raw(query, [username])
-      if (userPassword[0].password === password) return userSearch;
+      if (userPassword[0].password === password) {
+        return {"result": true, "data": user}
+      }
     }
     return {"result": false, "reason": `Username or password is invalid!`}
   }

@@ -19,13 +19,14 @@ app.get('/users/:userId', async (req, res) => {
 })
 
 app.post('/users', async (req, res) => {
+  const createUserPost = req.body
   const user = await User.create(
-    req.body.username,
-    req.body.password,
-    req.body.firstName,
-    req.body.lastName,
-    req.body.email,
-    req.body.avatar
+    createUserPost.username,
+    createUserPost.password,
+    createUserPost.firstName,
+    createUserPost.lastName,
+    createUserPost.email,
+    createUserPost.avatar
   )
 
   if (!user.result) {
@@ -68,9 +69,14 @@ app.get('/products', async (req, res) => {
   res.json(allProducts)
 })
 
+app.get('/products/:productId', async (req, res) => {
+  const product = await Product.findById(req.params.productId)
+  res.json(product)
+})
+
 // Reviews (API)
 app.get('/reviews/:productId', async (req, res) => {
-  const productReview = await Review.reviewByProduct(req.params.productId)
+  const productReview = await Review.findByProduct(req.params.productId)
   res.json(productReview)
 })
 
