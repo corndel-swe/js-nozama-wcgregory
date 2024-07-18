@@ -1,6 +1,7 @@
 import express from 'express'
 import User from '../models/User.js'
 import Product from '../models/Product.js'
+import Review from '../models/Review.js'
 
 const app = express()
 app.use(express.json())
@@ -11,7 +12,7 @@ app.get('/', (req, res) => {
   res.json({ msg: 'Welcome to Nozama!', time: timestamp.toLocaleString() })
 })
 
-// TODO: add endpoints during the workshop
+// Users (API)
 app.get('/users/:userId', async (req, res) => {
   const user = await User.findById(req.params.userId)
   res.json(user)
@@ -62,9 +63,15 @@ app.post('/users', async (req, res) => {
 })
 
 // Products (API)
-app.get('/products/', async (req, res) => {
+app.get('/products', async (req, res) => {
   const allProducts = await Product.findAll()
   res.json(allProducts)
+})
+
+// Reviews (API)
+app.get('/reviews/:productId', async (req, res) => {
+  const productReview = await Review.reviewByProduct(req.params.productId)
+  res.json(productReview)
 })
 
 export default app
