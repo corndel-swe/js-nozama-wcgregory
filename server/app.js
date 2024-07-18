@@ -19,23 +19,28 @@ app.get('/users/:userId', async (req, res) => {
 })
 
 app.post('/users/login', async (req, res) => {
+  /**
+   * Return user details if authenticated, otherwise return 401 and error response
+  */
   const isAuthenticated = await User.login(req.body.username, req.body.password)
+
   if (isAuthenticated.result && isAuthenticated.data) {
     res.json(isAuthenticated.data)
-  } else {
-    res.status(401)
-    res.json({
-      status: 'Unauthorised',
-      statusCode: 401,
-      error: {
-        code: 'UNAUTHORISED',
-        message: `Unauthorised credentials given for ${req.body.username}`,
-        details: `Unauthorised reason: ${isAuthenticated.reason}`,
-        timestamp: new Date(),
-        path: req.url
+    return
+  }
+
+  res.status(401)
+  res.json({
+    status: 'Unauthorised',
+    statusCode: 401,
+    error: {
+      code: 'UNAUTHORISED',
+      message: `Unauthorised credentials given for ${req.body.username}`,
+      details: `Unauthorised reason: ${isAuthenticated.reason}`,
+      timestamp: new Date(),
+      path: req.url
       }
-    })
-  } 
+  }) 
 })
 
 app.post('/users', async (req, res) => {
@@ -92,6 +97,11 @@ app.get('/products', async (req, res) => {
 app.get('/products/:productId', async (req, res) => {
   const product = await Product.findById(req.params.productId)
   res.json(product)
+})
+
+app.get('/products/category/:categoryId', async (req, res) => {
+  const products = await Product.findByCategory(req.params.categoryId)
+  res.json(products)
 })
 
 // Reviews (API)

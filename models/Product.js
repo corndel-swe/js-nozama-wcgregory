@@ -19,6 +19,23 @@ class Product {
     const results = await db.raw(query, [id])
     return results[0]
   }
+
+  static async findByCategory(categoryId) {
+    const query = `
+      SELECT
+        products.id,
+        products.name,
+        products.description,
+        products.price,
+        products.stockQuantity,
+        products.imageURL
+      FROM product_categories
+      INNER JOIN products ON product_categories.productId = products.id
+      WHERE product_categories.categoryId = ?;
+    `
+    const results = await db.raw(query, [categoryId])
+    return results
+  }
 }
 
 export default Product
