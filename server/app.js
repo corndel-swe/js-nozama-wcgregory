@@ -1,5 +1,6 @@
 import express from 'express'
 import User from '../models/User.js'
+import Product from '../models/Product.js'
 
 const app = express()
 app.use(express.json())
@@ -58,6 +59,12 @@ app.post('/users', async (req, res) => {
   //console.log(req.body)
   //console.log(req.headers)
   //res.sendStatus(200)
+})
+
+// Products (API)
+app.get('/products/', async (req, res) => {
+  const allProducts = await Product.findAll()
+  res.json(allProducts)
 })
 
 export default app
