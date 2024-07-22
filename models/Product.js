@@ -38,7 +38,7 @@ class Product {
   static async create(name, description, price, quantity, imageURL) {
     const image = imageURL ? imageURL : "https://picsum.photos/seed/X53bA/640/480"
     const productExists = await Product.findByName(name)
-    if (productExists) return {"result": false, "reason": "Unable to create product!"};
+    if (productExists) return {"result": false, "reason": "Unable to create new product!"};
     const query = `
       INSERT INTO products (name, description, price, quantity, imageURL)
       VALUES (?, ?, ?, ?, ?, ?) RETURNING *;

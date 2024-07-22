@@ -58,7 +58,7 @@ app.post('/users', async (req, res) => {
     res.statusMessage = 'Unable To Process Request'
     res.status(422)
     res.json({
-      status: 'Error',
+      status: 'error',
       statusCode: 422,
       error: {
         code: 'USER_NOT_CREATED',
